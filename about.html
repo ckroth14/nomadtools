@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Nomad Tools</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+  }
+
+  .about-text p {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .about-text p strong {
+    color: var(--text-dark);
+    font-weight: 600;
+  }
+
+  .divider { height: 1px; background: #ddd; margin: 2rem 0; }
+
+  /* CONTACT FORM */
+  .contact-block {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.75rem;
+    position: sticky;
+    top: 80px;
+  }
+
+  .contact-block h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  .contact-block p {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    color: var(--text-dark);
+    padding: 0.65rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus { border-color: var(--red); }
+
+  .contact-form textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder { color: #aaa; }
+
+  /* PRODUCT LINKS */
+  .product-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .product-link-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: border-color 0.15s;
+  }
+
+  .product-link-item:hover { border-color: #ccc; }
+
+  .product-link-arrow { color: var(--red); font-size: 0.8rem; }
+
+  @media (max-width: 768px) {
+    .about-layout { grid-template-columns: 1fr; }
+    .contact-block { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-nomad" src="logo-nomad-text.png" alt="nomad" />
+    <img class="nav-logo-signal" src="logo-signal.png" alt="" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="nomad-poe.html">nomad.poe</a></li>
+    <li><a href="toolbox.html">IP ToolBox</a></li>
+    <li><a href="media.html">Media</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="index.html#waitlist" class="nav-cta">Waitlist</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="nomad-poe.html">nomad.poe</a>
+  <a href="toolbox.html">IP ToolBox</a>
+  <a href="media.html">Media</a>
+  <a href="about.html" class="active">About</a>
+  <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h1>About Nomad Tools</h1>
+      <p>Built by a tech who does the work. Designed to solve the problems that show up every day on a job site.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="about-layout">
+
+      <div class="about-text">
+        <h2>Where this came from</h2>
+        <p>nomad.poe started as a field problem. Every camera install hits the same wall — you need power and a network to aim, focus, and configure the camera, but neither exists yet at the point of installation.</p>
+        <p>The existing tools — Veracity, Axis — solve part of the problem, but they're outdated hardware at a premium price. Proprietary batteries. 10/100 ethernet. No software integration.</p>
+        <p><strong>nomad.poe runs on the Makita or Milwaukee batteries already on your truck.</strong> Gigabit ethernet. Built-in Wi-Fi router. Pairs with free software. $299.</p>
+
+        <div class="divider"></div>
+
+        <h2>The product line</h2>
+        <p>nomad is a brand for field tools built around a consistent workflow. nomad.poe is the first device. nomad.ip ToolBox is the first software. More tools are in development.</p>
+        <p>The goal is a platform that reduces the time, equipment, and friction involved in camera and network installations — tools that a tech reaches for on every job.</p>
+
+        <div class="divider"></div>
+
+        <h2>Production status</h2>
+        <p>nomad.poe is a <strong>working prototype</strong> in limited production. Units are being built and tested. The waitlist is open. If you're a company looking to put these in your techs' hands, get in touch directly.</p>
+
+        <div class="divider"></div>
+
+        <h2>Products</h2>
+        <div class="product-links">
+          <a href="nomad-poe.html" class="product-link-item">
+            nomad.poe — $299
+            <span class="product-link-arrow">→</span>
+          </a>
+          <a href="toolbox.html" class="product-link-item">
+            nomad.ip ToolBox — Free
+            <span class="product-link-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- CONTACT FORM -->
+      <div class="contact-block">
+        <span class="tag">Contact</span>
+        <h2>Get in touch</h2>
+        <p>Questions about the device, bulk orders, or dealer inquiries — send a message and we'll get back to you.</p>
+        <div class="contact-form">
+          <input type="text" placeholder="Your name" />
+          <input type="email" placeholder="your@email.com" />
+          <input type="text" placeholder="Company (optional)" />
+          <textarea placeholder="Your message"></textarea>
+          <button class="btn btn-red" style="text-align:center;">Send Message</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-main.png" alt="Nomad" /></div>
+    <ul class="footer-links">
+      <li><a href="nomad-poe.html">nomad.poe</a></li>
+      <li><a href="toolbox.html">IP ToolBox</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Nomad Tools · nomadtools.us</p>
+  </div>
+</footer>
+
+</body>
+</html>

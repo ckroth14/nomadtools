@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nomad.ip ToolBox — Free Field Software</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .toolbox-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  /* APP SCREENSHOTS */
+  .app-screenshots {
+    position: sticky;
+    top: 100px;
+  }
+
+  .app-ss-main {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    margin-bottom: 0.75rem;
+  }
+
+  .app-ss-main img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .app-ss-thumbs {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .ss-thumb {
+    flex: 1;
+    border-radius: 4px;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    object-fit: cover;
+    height: 60px;
+    transition: border-color 0.15s;
+    background: #f5f5f5;
+  }
+
+  .ss-thumb:hover { border-color: #aaa; }
+  .ss-thumb.active { border-color: var(--red); }
+
+  .app-titlebar {
+    background: #2a2a2a;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+  }
+
+  .app-dots { display: flex; gap: 0.4rem; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: var(--red); }
+  .dot-y { background: #555; }
+  .dot-g { background: #444; }
+
+  .app-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: #666;
+    letter-spacing: 0.05em;
+  }
+
+  .app-body { padding: 1.25rem; }
+
+  .app-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .app-field {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 3px;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .app-field-label {
+    font-size: 0.6rem;
+    color: #555;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+
+  .app-field-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--red);
+    font-weight: 500;
+  }
+
+  .app-divider { height: 1px; background: #2a2a2a; margin: 0.75rem 0; }
+
+  .app-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+  .app-btn {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+
+  .app-btn-primary { background: var(--red); color: #fff; }
+  .app-btn-secondary { background: #2a2a2a; color: #888; border: 1px solid #333; }
+
+  .app-log {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 3px;
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  .app-log .log-ok { color: #4ade80; }
+  .app-log .log-red { color: var(--red); }
+
+  /* DOWNLOAD */
+  .download-block {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .download-block h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+
+  .download-block p {
+    font-size: 0.875rem;
+    color: var(--text-mid);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .download-form { display: flex; flex-direction: column; gap: 0.6rem; }
+  .download-form input { width: 100%; }
+
+  .download-note {
+    font-size: 0.72rem;
+    color: var(--silver);
+    margin-top: 0.4rem;
+  }
+
+  /* FEATURE GROUPS */
+  .feature-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .feature-group {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .feature-group-header {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #eee;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    letter-spacing: -0.01em;
+    background: #fafafa;
+  }
+
+  .feature-group-body {
+    padding: 0.75rem 1.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .toolbox-layout { grid-template-columns: 1fr; }
+    .app-window { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-nomad" src="logo-nomad-text.png" alt="nomad" />
+    <img class="nav-logo-signal" src="logo-signal.png" alt="" />
+    <img class="nav-logo-suffix visible" src="logo-iptoolbox-text.png" alt="ip ToolBox" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="nomad-poe.html">nomad.poe</a></li>
+    <li><a href="toolbox.html" class="active">IP ToolBox</a></li>
+    <li><a href="media.html">Media</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="index.html#waitlist" class="nav-cta">Waitlist</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE DROPDOWN -->
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="nomad-poe.html">nomad.poe</a>
+  <a href="toolbox.html" class="active">IP ToolBox</a>
+  <a href="media.html">Media</a>
+  <a href="about.html">About</a>
+  <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h1>nomad.ip ToolBox</h1>
+      <p>Free Windows utility for field techs. Manage IP addresses, configure adapters, and run network diagnostics — built for camera installs.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="toolbox-layout">
+
+      <!-- APP SCREENSHOTS -->
+      <div class="app-screenshots">
+        <div class="app-ss-main">
+          <img src="art/nomadiptoolbox_app.png" alt="nomad.ip ToolBox" id="ssMain" />
+        </div>
+        <div class="app-ss-thumbs">
+          <img src="art/nomadiptoolbox_app.png" alt="App" class="ss-thumb active" onclick="setSS(this)" />
+          <img src="art/nomadiptoolbox_app_scan.png" alt="Scanner" class="ss-thumb" onclick="setSS(this)" />
+          <img src="art/nomadiptoolbox_app_all.png" alt="Full workspace" class="ss-thumb" onclick="setSS(this)" />
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- DOWNLOAD FORM -->
+        <div class="download-block">
+          <span class="tag tag-red">Free Download</span>
+          <h2>nomad.ip ToolBox</h2>
+          <p>Enter your email to download. Windows only. We'll keep you updated on new tools and product releases.</p>
+          <div class="download-form">
+            <input type="email" placeholder="your@email.com" />
+            <button class="btn btn-red" style="width:100%; text-align:center;">Download for Windows</button>
+          </div>
+          <p class="download-note">Windows 10 / 11 · No install required · ~2MB</p>
+        </div>
+
+        <!-- FEATURE GROUPS -->
+        <div class="feature-groups">
+          <div class="feature-group">
+            <div class="feature-group-header">IP Management</div>
+            <div class="feature-group-body">
+              <ul class="feature-list">
+                <li>One-click DHCP</li>
+                <li>One-click static IP assignment</li>
+                <li>Reference IP matching</li>
+                <li>Automatic subnet matching</li>
+                <li>Current IP display</li>
+                <li>Subnet mask display</li>
+                <li>Gateway display</li>
+              </ul>
+            </div>
+          </div>
+          <div class="feature-group">
+            <div class="feature-group-header">Network Tools</div>
+            <div class="feature-group-body">
+              <ul class="feature-list">
+                <li>Ping gateway tool</li>
+                <li>Ping reference device</li>
+                <li>Command prompt launcher</li>
+                <li>Adapter selection</li>
+                <li>Adapter auto-detection</li>
+              </ul>
+            </div>
+          </div>
+          <div class="feature-group">
+            <div class="feature-group-header">Interface</div>
+            <div class="feature-group-body">
+              <ul class="feature-list">
+                <li>Activity logging</li>
+                <li>Compact mode</li>
+                <li>Always-on-top option</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-toolbox.png" alt="Nomad" /></div>
+    <ul class="footer-links">
+      <li><a href="nomad-poe.html">nomad.poe</a></li>
+      <li><a href="toolbox.html">IP ToolBox</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Nomad Tools · nomadtools.us</p>
+  </div>
+</footer>
+
+
+<script>
+  function setSS(thumb) {
+    document.getElementById('ssMain').src = thumb.src;
+    document.querySelectorAll('.ss-thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+  }
+</script>
+</body>
+</html>
