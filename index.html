@@ -15,7 +15,7 @@
     min-height: calc(100vh - 60px);
     display: flex;
     align-items: center;
-    padding: 4rem 2rem;
+    padding: 7rem 2rem 4rem 2rem;
     position: relative;
     overflow: hidden;
   }
@@ -41,15 +41,15 @@
     margin: 0 auto;
     width: 100%;
     display: grid;
-    grid-template-columns: 1.1fr 1.65fr;
+    grid-template-columns: 1.25fr 1.5fr;
     gap: 4rem;
-    align-items: center;
+    align-items: start;
     position: relative;
     z-index: 1;
   }
 
   .hero-text h1 {
-    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-size: clamp(2rem, 3.6vw, 3.2rem);
     font-weight: 600;
     color: var(--white);
     line-height: 1.2;
@@ -372,8 +372,11 @@
   .waitlist-form .btn-red { white-space: nowrap; box-shadow: 0 0 16px rgba(227,30,36,0.3); }
   .waitlist-note { font-size: 0.72rem; color: #444; margin-top: 0.75rem; }
 
-  @media (max-width: 768px) {
+  @media (max-width: 960px) {
     .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  @media (max-width: 768px) {
     .intro-inner { grid-template-columns: 1fr; gap: 0; }
     .intro-item { border-left: none !important; border-top: 1px solid #242424; padding: 1.75rem 0 !important; }
     .intro-item:first-child { border-top: none; }
@@ -805,12 +808,12 @@
   const words = [
     'camera.',
     'access point.',
+    'intercom.',
     'door controller.',
     'wireless bridge.',
-    'IP phone.',
-    'intercom.',
-    'Point 2 Point.',
-    'network device.',
+    'voip phone.',
+    'point to point.',
+    'your device.',
   ];
 
   let index = 0;
@@ -818,6 +821,7 @@
   const articleEl = document.getElementById('cycleArticle');
 
   function getArticle(word) {
+    if (word === 'your device.') return '';
     return /^[aeiou]/i.test(word) ? 'an' : 'a';
   }
 
@@ -835,10 +839,10 @@
     }, 400);
   }
 
-  // Start cycling after 2 seconds, every 2.2 seconds
+  // Start cycling after 2 seconds, every 3.4 seconds
   setTimeout(() => {
     el.classList.add('fade-in');
-    setInterval(cycleWord, 2200);
+    setInterval(cycleWord, 3400);
   }, 2000);
 </script>
 
