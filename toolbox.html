@@ -12,7 +12,7 @@
 <style>
   .toolbox-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: var(--img-col, 1fr) auto;
     gap: 4rem;
     align-items: start;
   }
@@ -24,31 +24,36 @@
   }
 
   .app-ss-main {
+    position: relative;
     border-radius: 6px;
     overflow: hidden;
     border: 1px solid #ddd;
     background: #f5f5f5;
     margin-bottom: 0.75rem;
+    aspect-ratio: 1261 / 857;
   }
 
   .app-ss-main img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
     display: block;
   }
 
   .app-ss-thumbs {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.5rem;
   }
 
   .ss-thumb {
-    flex: 1;
+    width: 100%;
     border-radius: 4px;
     border: 2px solid #ddd;
     cursor: pointer;
     object-fit: cover;
-    height: 60px;
+    aspect-ratio: 790 / 537;
+    height: auto;
     transition: border-color 0.15s;
     background: #f5f5f5;
   }
@@ -164,7 +169,7 @@
     color: var(--text-mid);
     font-weight: 300;
     line-height: 1.6;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.85rem;
   }
 
   .download-form { display: flex; flex-direction: column; gap: 0.6rem; }
@@ -270,17 +275,18 @@
       <!-- APP SCREENSHOTS -->
       <div class="app-screenshots">
         <div class="app-ss-main">
-          <img src="art/nomadiptoolbox_app.png" alt="nomad.ip ToolBox" id="ssMain" />
+          <img src="Art/annot_main.png" alt="nomad.ip ToolBox annotated" id="ssMain" />
         </div>
         <div class="app-ss-thumbs">
-          <img src="art/nomadiptoolbox_app.png" alt="App" class="ss-thumb active" onclick="setSS(this)" />
-          <img src="art/nomadiptoolbox_app_scan.png" alt="Scanner" class="ss-thumb" onclick="setSS(this)" />
-          <img src="art/nomadiptoolbox_app_all.png" alt="Full workspace" class="ss-thumb" onclick="setSS(this)" />
+          <img src="Art/annot_main.png" alt="Main" class="ss-thumb active" onclick="setSS(this)" />
+          <img src="Art/annot_third.png" alt="Tools" class="ss-thumb" onclick="setSS(this)" />
+          <img src="Art/annot_second.png" alt="Scanner" class="ss-thumb" onclick="setSS(this)" />
+          <img src="Art/nomadiptoolbox_app_all.png" alt="Full workspace" class="ss-thumb" onclick="setSS(this)" />
         </div>
       </div>
 
       <!-- RIGHT COLUMN -->
-      <div>
+      <div style="width: var(--win-width, 400px)">
         <!-- DOWNLOAD FORM -->
         <div class="download-block">
           <span class="tag tag-red">Free Download</span>
@@ -339,7 +345,7 @@
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo"><img src="logo-toolbox.png" alt="Nomad" /></div>
+    <div class="footer-logo"><img src="logo-nomad-text.png" alt="Nomad" /></div>
     <ul class="footer-links">
       <li><a href="nomad-poe.html">nomad.poe</a></li>
       <li><a href="toolbox.html">IP ToolBox</a></li>

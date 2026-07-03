@@ -17,63 +17,63 @@
     align-items: start;
   }
 
-  /* 360° TURNTABLE */
+  /* PRODUCT GALLERY VIEWER */
   .gallery { display: flex; flex-direction: column; gap: 0.75rem; }
 
-  .tt-outer {
+  .gv-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     border-radius: 6px;
     overflow: hidden;
     border: 1px solid #ddd;
     background: var(--bg-light);
-    position: relative;
-    cursor: ew-resize;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: none;
   }
 
-  .tt-stage {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    position: relative;
-  }
+  .gv-item { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 0.25s ease; }
+  .gv-item.active { opacity: 1; visibility: visible; }
 
-  .tt-stage img {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 88%; max-height: 92%;
-    object-fit: contain;
-    display: none;
-    pointer-events: none;
-    -webkit-user-drag: none;
-    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.18)) drop-shadow(0 3px 8px rgba(0,0,0,0.10));
-  }
+  .gv-360 { width: 100%; height: 100%; border: 0; display: block; background: transparent; }
 
-  .tt-stage img.tt-active { display: block; }
-
-  .tt-loader {
+  /* placeholder slots for not-yet-ready photos */
+  .gv-ph {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 12px; z-index: 10;
-    transition: opacity 0.4s;
+    align-items: center; justify-content: center; gap: 0.4rem;
+    background: repeating-linear-gradient(45deg, #ececec 0 14px, #f5f5f5 14px 28px);
   }
-
-  .tt-bar { width: 80px; height: 1px; background: #1e1e1e; border-radius: 1px; overflow: hidden; }
-  .tt-bar-fill { height: 100%; background: linear-gradient(90deg, #444, #777); width: 0%; transition: width 0.1s linear; }
-
-  .tt-hint-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0;
-    font-size: 0.72rem;
-    color: #555;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+  .gv-ph-label {
     font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #8a8a8f;
+  }
+  .gv-ph-label small { display: block; margin-top: 0.4rem; font-size: 0.66rem; color: #b3b3b3; letter-spacing: 0.08em; }
+
+  .gv-thumbs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+  .gv-thumb {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    background: var(--bg-light);
+    cursor: pointer;
+    padding: 0;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .gv-thumb:hover { border-color: #bbb; }
+  .gv-thumb.active { border-color: var(--red); box-shadow: 0 0 0 1px var(--red); }
+  .gv-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 14%; }
+  .gv-thumb-ph { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, #ececec 0 8px, #f5f5f5 8px 16px); }
+  .gv-badge {
+    position: absolute; top: 6px; left: 6px;
+    display: flex; align-items: center; gap: 4px;
+    padding: 2px 7px; border-radius: 999px;
+    background: rgba(20,20,22,0.82); color: #fff;
+    font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.06em;
   }
 
   /* PRODUCT INFO */
@@ -105,6 +105,7 @@
   }
 
   .price-block .price { font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; }
+  .price-block .price-was { font-size: 1.15rem; font-weight: 400; color: var(--text-mid); text-decoration: line-through; margin-right: 0.5rem; }
   .price-block .price-note { font-size: 0.8rem; color: var(--text-mid); text-align: right; line-height: 1.5; }
 
   .battery-row {
@@ -320,16 +321,31 @@
   <div class="content">
     <div class="product-layout">
 
-      <!-- 360° TURNTABLE -->
+      <!-- PRODUCT GALLERY VIEWER -->
       <div class="gallery">
-        <div class="tt-outer" id="ttOuter">
-          <div class="tt-stage" id="ttStage">
-            <div class="tt-loader" id="ttLoader">
-              <div class="tt-bar"><div class="tt-bar-fill" id="ttFill"></div></div>
-            </div>
+        <div class="gv-stage" id="gvStage">
+          <div class="gv-item active" data-i="0">
+            <iframe class="gv-360" src="product-360-viewer.html" title="nomad.poe 360° viewer" scrolling="no"></iframe>
+          </div>
+          <div class="gv-item" data-i="1">
+            <img src="Art/poe_top_annotated_v2.png" alt="nomad.poe top view — annotated" style="width:100%; height:100%; object-fit:contain; display:block;" />
+          </div>
+          <div class="gv-item" data-i="2">
+            <img src="Art/strap_poe.png" alt="Shoulder strap" style="width:100%; height:100%; object-fit:contain; display:block;" />
           </div>
         </div>
-        <div class="tt-hint-row">&#8592;&nbsp; drag to rotate 360° &nbsp;&#8594;</div>
+        <div class="gv-thumbs" id="gvThumbs">
+          <button type="button" class="gv-thumb active" data-i="0" aria-label="360° view">
+            <img src="360/frame_01.webp" alt="" />
+            <span class="gv-badge">&#8635; 360&#176;</span>
+          </button>
+          <button type="button" class="gv-thumb" data-i="1" aria-label="Top view annotated">
+            <img src="Art/poe_top_annotated_v2.png" alt="" />
+          </button>
+          <button type="button" class="gv-thumb" data-i="2" aria-label="Shoulder strap">
+            <img src="Art/strap_poe.png" alt="" />
+          </button>
+        </div>
       </div>
 
       <!-- PRODUCT INFO -->
@@ -339,8 +355,8 @@
         <p class="product-tagline">Powers IP cameras and creates a local Wi-Fi network using the 18V tool batteries you already carry. No AC power. No customer network access required.</p>
 
         <div class="price-block">
-          <span class="price">$299</span>
-          <span class="price-note">Battery not included<br>Use your own Makita / Milwaukee</span>
+          <span><span class="price-was">$349</span><span class="price">$299</span></span>
+          <span class="price-note">Battery not included<br> Makita / Milwaukee/ DeWalt</span>
         </div>
 
         <div class="battery-row">
@@ -366,6 +382,7 @@
               <tr><td>Ports</td><td>1× PoE out, 1× LAN, 1× USB</td></tr>
               <tr><td>USB Tethering</td><td>Supported</td></tr>
               <tr><td>DHCP Server</td><td>Built-in</td></tr>
+              <tr><td>Material</td><td>3D Printed (PETG) Body and mount components</td></tr>
               <tr><td>Battery Included</td><td>No</td></tr>
               <tr><td>Carry</td><td>Shoulder strap included</td></tr>
             </table>
@@ -470,7 +487,7 @@
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo"><img src="logo-poe.png" alt="Nomad" /></div>
+    <div class="footer-logo"><img src="logo-nomad-text.png" alt="Nomad" /></div>
     <ul class="footer-links">
       <li><a href="nomad-poe.html">nomad.poe</a></li>
       <li><a href="toolbox.html">IP ToolBox</a></li>
@@ -483,82 +500,17 @@
 
 <script>
 (function () {
-  'use strict';
-  var TOTAL        = 25;
-  var PX_PER_FRAME = 20;
-  var SPIN_MS      = 2400;
-
-  var outer     = document.getElementById('ttOuter');
-  var stage     = document.getElementById('ttStage');
-  var fillEl    = document.getElementById('ttFill');
-  var loaderEl  = document.getElementById('ttLoader');
-
-  var frames  = [];
-  var current = 0;
-  var settled = 0;
-
-  for (var i = 0; i < TOTAL; i++) {
-    var img = new Image();
-    img.src = '360/frame_' + (i + 1 < 10 ? '0' : '') + (i + 1) + '.webp';
-    img.alt = ''; img.draggable = false;
-    (function (el) {
-      function done() {
-        settled++;
-        fillEl.style.width = Math.round(settled / TOTAL * 100) + '%';
-        if (settled === TOTAL) onReady();
-      }
-      el.onload = done; el.onerror = done;
-    })(img);
-    frames.push(img);
-    stage.appendChild(img);
-  }
-
-  function goTo(idx) {
-    var n = ((idx % TOTAL) + TOTAL) % TOTAL;
-    frames[current].classList.remove('tt-active');
-    current = n;
-    frames[current].classList.add('tt-active');
-  }
-
-  function onReady() {
-    frames[0].classList.add('tt-active');
-    loaderEl.style.opacity = '0';
-    setTimeout(function () { loaderEl.style.display = 'none'; }, 420);
-    // Intro spin then stop
-    var start = performance.now();
-    (function spin(now) {
-      var t = Math.min((now - start) / SPIN_MS, 1);
-      goTo(Math.round((1 - Math.pow(1 - t, 3)) * TOTAL));
-      if (t < 1) requestAnimationFrame(spin); else goTo(0);
-    })(performance.now());
-  }
-
-  var dragging = false, lastX = 0, accum = 0, vel = 0, raf = null;
-
-  function onStart(x) { dragging = true; lastX = x; accum = 0; vel = 0; if (raf) cancelAnimationFrame(raf); }
-  function onMove(x) {
-    if (!dragging) return;
-    var dx = x - lastX; lastX = x; vel = dx; accum += dx;
-    var s = Math.trunc(accum / PX_PER_FRAME);
-    if (s) { goTo(current - s); accum -= s * PX_PER_FRAME; }
-  }
-  function onEnd() {
-    if (!dragging) return; dragging = false;
-    if (Math.abs(vel) < 2) return;
-    (function coast() {
-      vel *= 0.88; accum += vel;
-      var s = Math.trunc(accum / PX_PER_FRAME);
-      if (s) { goTo(current - s); accum -= s * PX_PER_FRAME; }
-      if (Math.abs(vel) > 0.35) raf = requestAnimationFrame(coast);
-    })();
-  }
-
-  outer.addEventListener('mousedown',  function (e) { e.preventDefault(); onStart(e.clientX); });
-  window.addEventListener('mousemove', function (e) { onMove(e.clientX); });
-  window.addEventListener('mouseup',   onEnd);
-  outer.addEventListener('touchstart',  function (e) { onStart(e.touches[0].clientX); }, { passive: true });
-  window.addEventListener('touchmove',  function (e) { if (dragging) onMove(e.touches[0].clientX); }, { passive: true });
-  window.addEventListener('touchend',   onEnd, { passive: true });
+  var stage = document.getElementById('gvStage');
+  var thumbs = document.getElementById('gvThumbs');
+  if (!stage || !thumbs) return;
+  var items = stage.querySelectorAll('.gv-item');
+  var btns = thumbs.querySelectorAll('.gv-thumb');
+  thumbs.addEventListener('click', function (e) {
+    var b = e.target.closest('.gv-thumb'); if (!b) return;
+    var i = +b.getAttribute('data-i');
+    items.forEach(function (it) { it.classList.toggle('active', +it.getAttribute('data-i') === i); });
+    btns.forEach(function (x) { x.classList.toggle('active', x === b); });
+  });
 })();
 </script>
 

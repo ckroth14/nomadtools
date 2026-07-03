@@ -14,8 +14,8 @@
     background: var(--black);
     min-height: calc(100vh - 60px);
     display: flex;
-    align-items: center;
-    padding: 4rem 2rem;
+    align-items: flex-start;
+    padding: 2.5rem 2rem 4rem 2rem;
     position: relative;
     overflow: hidden;
   }
@@ -41,15 +41,28 @@
     margin: 0 auto;
     width: 100%;
     display: grid;
-    grid-template-columns: 1.1fr 1.65fr;
+    grid-template-columns: 1.25fr 1.5fr;
     gap: 4rem;
-    align-items: center;
+    align-items: start;
     position: relative;
     z-index: 1;
   }
 
+  .hero-device {
+    margin-top: -2.5rem;
+  }
+
+  .hero-360 {
+    width: 100%;
+    height: 600px;
+    border: 0;
+    display: block;
+    margin: 0 auto;
+    background: transparent;
+  }
+
   .hero-text h1 {
-    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-size: clamp(2rem, 3.6vw, 3.2rem);
     font-weight: 600;
     color: var(--white);
     line-height: 1.2;
@@ -91,6 +104,14 @@
     letter-spacing: -0.03em;
   }
 
+  .price-was {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #777;
+    text-decoration: line-through;
+    margin-right: 0.4rem;
+  }
+
   .price-sub {
     font-size: 0.8rem;
     color: #555;
@@ -99,9 +120,15 @@
 
   /* 360° TURNTABLE */
   .turntable-wrap {
+    /* --tt-frame: overall footprint of the turntable element (less = smaller transparent area) */
+    /* --tt-device: how large the device renders inside that footprint */
+    --tt-frame: 90%;
+    --tt-device: 88%;
     position: relative;
     user-select: none;
     -webkit-user-select: none;
+    max-width: var(--tt-frame);
+    margin: 0 auto;
   }
 
   .turntable-stage {
@@ -114,7 +141,7 @@
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 88%;
+    width: var(--tt-device);
     max-height: 92%;
     object-fit: contain;
     display: none;
@@ -263,6 +290,15 @@
     position: relative;
   }
 
+  .product-card-img .card-360 {
+    width: 100%;
+    height: 230px;
+    border: 0;
+    display: block;
+    background: transparent;
+    pointer-events: none;
+  }
+
   .product-card-img img {
     width: 100%;
     height: 200px;
@@ -279,6 +315,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 230px;
     padding: 2.5rem;
   }
 
@@ -371,6 +408,10 @@
   .waitlist-form input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(227,30,36,0.12); }
   .waitlist-form .btn-red { white-space: nowrap; box-shadow: 0 0 16px rgba(227,30,36,0.3); }
   .waitlist-note { font-size: 0.72rem; color: #444; margin-top: 0.75rem; }
+
+  @media (max-width: 960px) {
+    .hero-inner { grid-template-columns: 1.7fr 1.1fr; gap: 2.5rem; }
+  }
 
   @media (max-width: 768px) {
     .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -663,25 +704,19 @@
       <div class="hero-text">
         <span class="tag tag-red">Working Prototype — Limited Units</span>
         <h1>Power <span id="cycleArticle">a</span> <span class="cycle-word" id="cycleWord">camera.</span><br>Build a network.<br><span>Go anywhere.</span></h1>
-        <p>nomad.poe runs on the Makita or Milwaukee batteries already on your truck. No AC power. No customer network. No problem.</p>
+        <p>nomad.poe runs on the batteries you already on your truck. No AC power. No customer network. No problem.</p>
         <div class="hero-actions">
           <a href="nomad-poe.html" class="btn btn-red">See the Device</a>
           <a href="toolbox.html" class="btn btn-outline-white">Free Software</a>
         </div>
         <div class="hero-price">
-          <span class="price-num">$299</span>
+          <span><span class="price-was">$349</span><span class="price-num">$299</span></span>
           <span class="price-sub">nomad.poe device<br>Battery not included — use your own</span>
         </div>
       </div>
       <div class="hero-device">
-        <div class="turntable-wrap" id="ttWrap">
-          <div class="turntable-stage" id="ttStage">
-            <div class="tt-loading" id="ttLoading">
-              <div class="tt-bar"><div class="tt-bar-fill" id="ttFill"></div></div>
-            </div>
-          </div>
-        </div>
-        <p class="device-caption">nomad.poe — battery-powered PoE field tool</p>
+        <iframe class="hero-360" src="product-360-viewer.html" title="nomad.poe 360° viewer" scrolling="no" allowtransparency="true"></iframe>
+        <p class="device-caption" style="color: rgb(227, 30, 36); font-size: 14px">nomad.poe — battery-powered PoE field tool</p>
       </div>
     </div>
   </section>
@@ -714,9 +749,9 @@
       <div class="product-cards">
         <a href="nomad-poe.html" class="product-card">
           <div class="product-card-img">
-            <img src="device1.jpeg" alt="nomad.poe device" />
+            <iframe class="card-360" src="product-360-viewer.html?card=1" title="nomad.poe rotating preview" scrolling="no" tabindex="-1"></iframe>
           </div>
-          <div class="product-card-body">
+          <div class="product-card-body" style="height: 207px">
             <h3>nomad.poe</h3>
             <p>Battery-powered PoE+ injector and Wi-Fi router. Powers IP cameras and creates a local network anywhere — no AC required.</p>
             <ul class="feature-list">
@@ -727,7 +762,7 @@
             </ul>
           </div>
           <div class="product-card-footer">
-            <span class="product-card-price">$299</span>
+            <span class="product-card-price"><span style="font-size:0.85rem; font-weight:400; color:var(--text-mid); text-decoration:line-through; margin-right:0.35rem;">$349</span>$299</span>
             <span class="product-card-link">View device →</span>
           </div>
         </a>
@@ -805,12 +840,12 @@
   const words = [
     'camera.',
     'access point.',
+    'intercom.',
     'door controller.',
     'wireless bridge.',
-    'IP phone.',
-    'intercom.',
-    'Point 2 Point.',
-    'network device.',
+    'voip phone.',
+    'point to point.',
+    'your device.',
   ];
 
   let index = 0;
@@ -818,6 +853,7 @@
   const articleEl = document.getElementById('cycleArticle');
 
   function getArticle(word) {
+    if (word === 'your device.') return '';
     return /^[aeiou]/i.test(word) ? 'an' : 'a';
   }
 
@@ -835,64 +871,11 @@
     }, 400);
   }
 
-  // Start cycling after 2 seconds, every 2.2 seconds
+  // Start cycling after 2 seconds, every 3.4 seconds
   setTimeout(() => {
     el.classList.add('fade-in');
-    setInterval(cycleWord, 2200);
+    setInterval(cycleWord, 3400);
   }, 2000);
-</script>
-
-<script>
-(function () {
-  'use strict';
-  var TOTAL      = 25;
-  var MS_PER_REV = 5000; // one full rotation in 5 seconds
-
-  var stage     = document.getElementById('ttStage');
-  var fillEl    = document.getElementById('ttFill');
-  var loadingEl = document.getElementById('ttLoading');
-
-  var frames  = [];
-  var current = 0;
-  var settled = 0;
-
-  for (var i = 0; i < TOTAL; i++) {
-    var img = new Image();
-    img.src = '360/frame_' + (i + 1 < 10 ? '0' : '') + (i + 1) + '.webp';
-    img.alt = ''; img.draggable = false;
-    (function (el) {
-      function done() {
-        settled++;
-        fillEl.style.width = Math.round(settled / TOTAL * 100) + '%';
-        if (settled === TOTAL) onReady();
-      }
-      el.onload = done; el.onerror = done;
-    })(img);
-    frames.push(img);
-    stage.appendChild(img);
-  }
-
-  function goTo(idx) {
-    var n = ((idx % TOTAL) + TOTAL) % TOTAL;
-    frames[current].classList.remove('tt-active');
-    current = n;
-    frames[current].classList.add('tt-active');
-  }
-
-  function onReady() {
-    frames[0].classList.add('tt-active');
-    loadingEl.style.opacity = '0';
-    setTimeout(function () { loadingEl.style.display = 'none'; }, 420);
-    // Continuous auto-spin
-    var startTime = performance.now();
-    (function spin(now) {
-      var elapsed = now - startTime;
-      var frameIdx = Math.floor((elapsed / MS_PER_REV) * TOTAL) % TOTAL;
-      goTo(frameIdx);
-      requestAnimationFrame(spin);
-    })(performance.now());
-  }
-})();
 </script>
 
 </body>

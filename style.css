@@ -35,7 +35,7 @@ nav {
   z-index: 999;
   background: var(--nav-bg);
   border-bottom: 1px solid #222;
-  height: 80px;
+  height: 60px;
   display: flex;
   align-items: center;
   padding: 0 2rem;
@@ -395,7 +395,7 @@ footer {
 
 .feature-list li::before {
   content: '—';
-  color: var(--red);
+  color: var(--red) !important;
   font-size: 0.75rem;
   flex-shrink: 0;
 }

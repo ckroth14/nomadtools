@@ -41,13 +41,35 @@
   .divider { height: 1px; background: #ddd; margin: 2rem 0; }
 
   /* CONTACT FORM */
+  .about-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: sticky;
+    top: 80px;
+  }
+
   .contact-block {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 6px;
     padding: 1.75rem;
-    position: sticky;
-    top: 80px;
+  }
+
+  .credit-block {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .credit-block img {
+    width: 96px;
+    height: 96px;
+    opacity: 0.9;
   }
 
   .contact-block h2 {
@@ -126,7 +148,7 @@
 
   @media (max-width: 768px) {
     .about-layout { grid-template-columns: 1fr; }
-    .contact-block { position: static; }
+    .about-aside { position: static; }
   }
 </style>
 </head>
@@ -189,7 +211,7 @@
         <h2>Where this came from</h2>
         <p>nomad.poe started as a field problem. Every camera install hits the same wall — you need power and a network to aim, focus, and configure the camera, but neither exists yet at the point of installation.</p>
         <p>The existing tools — Veracity, Axis — solve part of the problem, but they're outdated hardware at a premium price. Proprietary batteries. 10/100 ethernet. No software integration.</p>
-        <p><strong>nomad.poe runs on the Makita or Milwaukee batteries already on your truck.</strong> Gigabit ethernet. Built-in Wi-Fi router. Pairs with free software. $299.</p>
+        <p><strong>nomad.poe runs on the batteries already on your truck.</strong> Gigabit ethernet. Built-in Wi-Fi router. Pairs with free software. $299.</p>
 
         <div class="divider"></div>
 
@@ -218,6 +240,7 @@
       </div>
 
       <!-- CONTACT FORM -->
+      <div class="about-aside">
       <div class="contact-block">
         <span class="tag">Contact</span>
         <h2>Get in touch</h2>
@@ -231,13 +254,19 @@
         </div>
       </div>
 
+      <!-- DESIGN CREDIT -->
+      <div class="credit-block" style="background-color: rgba(255, 255, 255, 0); height: 4px">
+        <img src="Art/ck-concepts.png" alt="CK Concepts" style="width: 2px; height: 2px" />
+      </div>
+      </div>
+
     </div>
   </div>
 </div>
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo"><img src="logo-main.png" alt="Nomad" /></div>
+    <div class="footer-logo"><img src="logo-nomad-text.png" alt="Nomad" /></div>
     <ul class="footer-links">
       <li><a href="nomad-poe.html">nomad.poe</a></li>
       <li><a href="toolbox.html">IP ToolBox</a></li>
