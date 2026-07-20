@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join the Waitlist — Nomad Tools</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .wl-layout {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .wl-layout { grid-template-columns: 1fr; }
+  }
+
+  /* FULL WAITLIST FORM */
+  .wl-block {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 2rem;
+  }
+
+  .wl-block h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+    color: var(--text-dark);
+  }
+
+  .wl-block > p {
+    font-size: 0.875rem;
+    color: var(--text-mid);
+    margin-bottom: 1.5rem;
+    line-height: 1.55;
+  }
+
+  .wl-form { display: flex; flex-direction: column; gap: 1rem; }
+
+  .wl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 520px) { .wl-row { grid-template-columns: 1fr; } }
+
+  .wl-field label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 0.4rem;
+  }
+
+  .wl-form input,
+  .wl-form select,
+  .wl-form textarea {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.65rem 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-dark);
+  }
+
+  .wl-form input:focus,
+  .wl-form select:focus,
+  .wl-form textarea:focus { outline: none; border-color: var(--red); }
+
+  .wl-form input::placeholder,
+  .wl-form textarea::placeholder { color: #aaa; }
+
+  .wl-form textarea { min-height: 100px; resize: vertical; }
+
+  .wl-submit {
+    margin-top: 0.5rem;
+    align-self: flex-start;
+  }
+
+  .wl-success {
+    display: none;
+    text-align: center;
+    padding: 2.5rem 1rem;
+  }
+
+  .wl-success.show { display: block; }
+  .wl-form.hide { display: none; }
+
+  .wl-success h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .wl-success p {
+    font-size: 0.875rem;
+    color: var(--text-mid);
+  }
+
+  /* MEMBERSHIP ASIDE */
+  .wl-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .member-block {
+    background: var(--black);
+    border-radius: 6px;
+    padding: 1.75rem;
+    color: #fff;
+  }
+
+  .member-block .tag { margin-bottom: 0.9rem; }
+
+  .member-block h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .member-block p {
+    font-size: 0.825rem;
+    color: var(--silver);
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+  }
+
+  .member-form { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .member-form input {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 0.65rem 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    color: #fff;
+  }
+
+  .member-form input::placeholder { color: #666; }
+  .member-form input:focus { outline: none; border-color: var(--red); }
+
+  .member-note {
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: 0.6rem;
+  }
+
+  .member-success {
+    display: none;
+    font-size: 0.85rem;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .member-success.show { display: block; }
+  .member-form.hide { display: none; }
+
+  .info-block {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1.5rem 1.75rem;
+  }
+
+  .info-block h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+  }
+
+  .info-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .info-block li {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .info-block li::before { content: '—'; color: var(--red); flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-nomad" src="logo-nomad-text.png" alt="nomad" />
+    <img class="nav-logo-signal" src="logo-signal.png" alt="" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="nomad-poe.html">nomad.poe</a></li>
+    <li><a href="toolbox.html">IP ToolBox</a></li>
+    <li><a href="media.html">Media</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="waitlist.html" class="nav-cta active">Waitlist</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="nomad-poe.html">nomad.poe</a>
+  <a href="toolbox.html">IP ToolBox</a>
+  <a href="media.html">Media</a>
+  <a href="about.html">About</a>
+  <a href="waitlist.html" class="nav-cta active">Join Waitlist</a>
+</div>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <h1>Join the Waitlist</h1>
+      <p>nomad.poe is in limited production. Tell us about your use case and we'll reach out when units are ready to ship.</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="wl-layout">
+
+      <!-- FULL WAITLIST FORM -->
+      <div class="wl-block">
+        <span class="tag tag-red">Reserve a unit</span>
+        <h2>Get on the list</h2>
+        <p>This goes straight to our team — no third-party signup, no spam. The more detail you give us, the better we can prioritize builds.</p>
+
+        <form class="wl-form" id="wlForm">
+          <div class="wl-row">
+            <div class="wl-field">
+              <label for="wlName">Full name</label>
+              <input type="text" id="wlName" placeholder="Jane Smith" required />
+            </div>
+            <div class="wl-field">
+              <label for="wlEmail">Email</label>
+              <input type="email" id="wlEmail" placeholder="jane@company.com" required />
+            </div>
+          </div>
+
+          <div class="wl-row">
+            <div class="wl-field">
+              <label for="wlCompany">Company / Crew</label>
+              <input type="text" id="wlCompany" placeholder="Acme Networks" />
+            </div>
+            <div class="wl-field">
+              <label for="wlPhone">Phone (optional)</label>
+              <input type="tel" id="wlPhone" placeholder="(555) 555-0100" />
+            </div>
+          </div>
+
+          <div class="wl-field">
+            <label for="wlBattery">Battery platform</label>
+            <select id="wlBattery">
+              <option>Makita</option>
+              <option>Milwaukee</option>
+              <option>DeWalt</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="wl-row">
+            <div class="wl-field">
+              <label for="wlUse">Primary use case</label>
+              <select id="wlUse">
+                <option>IP camera deployment</option>
+                <option>Wireless bridge / PtP</option>
+                <option>Access control / intercom</option>
+                <option>Temporary jobsite network</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="wl-field">
+              <label for="wlQty">Quantity interested</label>
+              <select id="wlQty">
+                <option>1–2 units</option>
+                <option>3–9 units</option>
+                <option>10–25 units</option>
+                <option>25+ units</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="wl-field">
+            <label for="wlNotes">Anything else we should know?</label>
+            <textarea id="wlNotes" placeholder="Timeline, jobsite conditions, integrations you need..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-red wl-submit">Reserve my spot</button>
+        </form>
+
+        <div class="wl-success" id="wlSuccess">
+          <h3>You're on the list.</h3>
+          <p>We've got your details — expect an email as units become available.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="wl-aside">
+        <div class="member-block">
+          <span class="tag tag-red">Membership</span>
+          <h2>Just want updates?</h2>
+          <p>Drop your email for release news and field-tool announcements. No commitment, no form to fill out.</p>
+          <form class="member-form" id="memberForm">
+            <input type="email" id="memberEmail" placeholder="your@email.com" required />
+            <button type="submit" class="btn btn-outline-white">Subscribe</button>
+          </form>
+          <p class="member-success" id="memberSuccess">Thanks — you're subscribed.</p>
+          <p class="member-note">No spam. Unsubscribe anytime.</p>
+        </div>
+
+        <div class="info-block">
+          <h3>What happens next</h3>
+          <ul>
+            <li>We review every submission by hand</li>
+            <li>Units ship in small batches as they're built</li>
+            <li>Higher-quantity requests help us plan runs</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-nomad-text.png" alt="Nomad" /></div>
+    <ul class="footer-links">
+      <li><a href="nomad-poe.html">nomad.poe</a></li>
+      <li><a href="toolbox.html">IP ToolBox</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Nomad Tools · nomadtools.us</p>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  document.getElementById('wlForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    this.classList.add('hide');
+    document.getElementById('wlSuccess').classList.add('show');
+  });
+
+  document.getElementById('memberForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    this.classList.add('hide');
+    document.getElementById('memberSuccess').classList.add('show');
+  });
+</script>
+
+</body>
+</html>

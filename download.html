@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Download nomad.ip ToolBox — Nomad Tools</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .dl-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .dl-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    border-radius: 10px;
+    color: var(--red);
+  }
+
+  .dl-icon svg { width: 30px; height: 30px; }
+
+  .dl-wrap h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+  }
+
+  .dl-wrap > p {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .dl-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .dl-card .btn { width: 100%; text-align: center; }
+
+  .dl-meta {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+    font-size: 0.78rem;
+    color: var(--text-mid);
+  }
+
+  .dl-notes {
+    text-align: left;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .dl-notes h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+  }
+
+  .dl-back {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-nomad" src="logo-nomad-text.png" alt="nomad" />
+    <img class="nav-logo-signal" src="logo-signal.png" alt="" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="nomad-poe.html">nomad.poe</a></li>
+    <li><a href="toolbox.html">IP ToolBox</a></li>
+    <li><a href="media.html">Media</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="waitlist.html" class="nav-cta">Waitlist</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="nomad-poe.html">nomad.poe</a>
+  <a href="toolbox.html">IP ToolBox</a>
+  <a href="media.html">Media</a>
+  <a href="about.html">About</a>
+  <a href="waitlist.html" class="nav-cta">Join Waitlist</a>
+</div>
+
+<div class="page">
+  <div class="content" style="padding-top: 4rem; padding-bottom: 4rem;">
+    <div class="dl-wrap">
+      <div class="dl-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      </div>
+      <h1>nomad.ip ToolBox</h1>
+      <p>Windows utility for diagnosing and configuring IP cameras and network devices in the field.</p>
+
+      <div class="dl-card">
+        <a href="#" class="btn btn-red">Download for Windows</a>
+        <div class="dl-meta">
+          <span>Windows 10 / 11</span>
+          <span>·</span>
+          <span>No install required</span>
+          <span>·</span>
+          <span>~2MB</span>
+        </div>
+      </div>
+
+      <div class="dl-notes">
+        <h3>Before you run it</h3>
+        <p>Windows may show a SmartScreen warning for unsigned apps — this is expected for a small independent tool. Click "More info" then "Run anyway" to continue.</p>
+        <p>The first time you run it may take longer to start. It will then ask to run as an administrator. This will keep Windows from asking permission every time you change your IP.</p>
+      </div>
+
+      <a href="toolbox.html" class="dl-back">← Back to IP ToolBox</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-nomad-text.png" alt="Nomad" /></div>
+    <ul class="footer-links">
+      <li><a href="nomad-poe.html">nomad.poe</a></li>
+      <li><a href="toolbox.html">IP ToolBox</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Nomad Tools · nomadtools.us</p>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

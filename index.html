@@ -394,7 +394,7 @@
     line-height: 1.6;
   }
 
-  .waitlist-form { display: flex; gap: 0.5rem; max-width: 460px; margin: 0 auto; }
+  .waitlist-form { display: flex; justify-content: center; gap: 0.5rem; max-width: 460px; margin: 0 auto; }
 
   .waitlist-form input {
     flex: 1;
@@ -436,7 +436,7 @@
     <li><a href="toolbox.html">IP ToolBox</a></li>
     <li><a href="media.html">Media</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="#waitlist" class="nav-cta">Waitlist</a></li>
+    <li><a href="waitlist.html" class="nav-cta">Waitlist</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -450,7 +450,7 @@
   <a href="toolbox.html">IP ToolBox</a>
   <a href="media.html">Media</a>
   <a href="about.html">About</a>
-  <a href="#waitlist" class="nav-cta" id="mobileWaitlist">Join Waitlist</a>
+  <a href="waitlist.html" class="nav-cta" id="mobileWaitlist">Join Waitlist</a>
 </div>
 
 <script>
@@ -775,7 +775,7 @@
             <p>Free Windows utility for field techs. One-click DHCP, static IP assignment, subnet matching, and network diagnostics — built for camera installs.</p>
             <ul class="feature-list">
               <li>One-click DHCP / static IP</li>
-              <li>Adapter auto-detection</li>
+              <li>Active IP scan tool</li>
               <li>Ping tools + activity log</li>
               <li>Compact / always-on-top mode</li>
             </ul>
@@ -795,8 +795,7 @@
       <h2>Join the waitlist</h2>
       <p>nomad.poe is in limited production. Get notified when units are ready to ship.</p>
       <div class="waitlist-form">
-        <input type="email" placeholder="your@email.com" />
-        <button class="btn btn-red">Reserve my spot</button>
+        <a href="waitlist.html" class="btn btn-red">Join the Waitlist</a>
       </div>
       <p class="waitlist-note">No spam. Just a heads up when units ship.</p>
     </div>

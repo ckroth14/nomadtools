@@ -165,7 +165,7 @@
     <li><a href="toolbox.html">IP ToolBox</a></li>
     <li><a href="media.html">Media</a></li>
     <li><a href="about.html" class="active">About</a></li>
-    <li><a href="index.html#waitlist" class="nav-cta">Waitlist</a></li>
+    <li><a href="waitlist.html" class="nav-cta">Waitlist</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -178,7 +178,7 @@
   <a href="toolbox.html">IP ToolBox</a>
   <a href="media.html">Media</a>
   <a href="about.html" class="active">About</a>
-  <a href="index.html#waitlist" class="nav-cta">Join Waitlist</a>
+  <a href="waitlist.html" class="nav-cta">Join Waitlist</a>
 </div>
 
 <script>
@@ -193,6 +193,12 @@
       hamburger.classList.remove('open');
       mobileMenu.classList.remove('open');
     });
+  });
+
+  document.getElementById('aboutMemberForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('aboutMemberSuccess').style.display = 'block';
   });
 </script>
 
@@ -244,13 +250,18 @@
       <div class="contact-block">
         <span class="tag">Contact</span>
         <h2>Get in touch</h2>
-        <p>Questions about the device, bulk orders, or dealer inquiries — send a message and we'll get back to you.</p>
-        <div class="contact-form">
-          <input type="text" placeholder="Your name" />
-          <input type="email" placeholder="your@email.com" />
-          <input type="text" placeholder="Company (optional)" />
-          <textarea placeholder="Your message"></textarea>
-          <button class="btn btn-red" style="text-align:center;">Send Message</button>
+        <p>Questions about the device, bulk orders, or dealer inquiries — reach out directly.</p>
+        <p style="font-size:1.1rem; font-weight:600; color:var(--text-dark); margin-bottom:1.5rem;"><a href="mailto:info@nomadtools.us">info@nomadtools.us</a></p>
+
+        <div style="border-top:1px solid #eee; padding-top:1.5rem;">
+          <h2 style="margin-bottom:0.35rem;">Join the membership</h2>
+          <p>Get release news and field-tool announcements.</p>
+          <form class="contact-form" id="aboutMemberForm">
+            <input type="email" id="aboutMemberEmail" placeholder="your@email.com" required />
+            <button type="submit" class="btn btn-red" style="text-align:center;">Join</button>
+          </form>
+          <p class="member-success" id="aboutMemberSuccess" style="display:none; font-size:0.85rem; color:var(--red); font-weight:500; margin-top:0.75rem;">Thanks — you're subscribed.</p>
+          <p style="font-size:0.7rem; color:#999; margin-top:0.6rem;">No spam. Unsubscribe anytime.</p>
         </div>
       </div>
 
