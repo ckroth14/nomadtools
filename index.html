@@ -794,10 +794,12 @@
     <div class="waitlist-inner">
       <h2>Join the waitlist</h2>
       <p>nomad.poe is in limited production. Get notified when units are ready to ship.</p>
-      <div class="waitlist-form">
-        <a href="waitlist.html" class="btn btn-red">Join the Waitlist</a>
-      </div>
-      <p class="waitlist-note">No spam. Just a heads up when units ship.</p>
+      <form class="waitlist-form js-subscribe-form" data-list="waitlist" data-source="waitlist-index" data-success-message="You're on the wait list — check your inbox for a confirmation.">
+        <input type="email" name="email" placeholder="your@email.com" required />
+        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit" class="btn btn-red">Reserve my spot</button>
+      </form>
+      <p class="waitlist-note">We'll only use your email to send Nomad Tools updates. No spam, unsubscribe anytime.</p>
     </div>
   </section>
 </div>
@@ -877,5 +879,7 @@
   }, 2000);
 </script>
 
+
+<script src="forms.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+name = "nomadtools"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "."
+
+# D1 binding for local `wrangler pages dev`. The Pages dashboard binding
+# (Settings → Functions → D1 database bindings, name "DB") is what production
+# actually uses — this file only matters for local testing. See SETUP.md.
+[[d1_databases]]
+binding = "DB"
+database_name = "nomadtools-lists"
+database_id = "f9cca5b7-6265-4b2e-b2b2-02db38371d6e"
