@@ -151,7 +151,7 @@ function waitlistTemplate() {
   const html = emailShell(`
     <h1 style="margin:0 0 16px; font-size:20px; color:#1a1a1a;">You're on the wait list</h1>
     <p style="margin:0 0 16px;">Thanks for joining the Nomad.PoE wait list. You're in line — we'll email this address the moment it's available to order.</p>
-    <p style="margin:0 0 16px;">In the meantime, here's what Nomad.PoE is: [1&ndash;2 line product blurb].</p>
+    <p style="margin:0 0 16px;">nomad.poe is a battery-powered PoE field tool — power and a gigabit network for your camera in one compact box, no AC required. Built for techs who do the work.</p>
     <p style="margin:0;">Questions? Just reply to this email.</p>
   `);
 
@@ -160,7 +160,7 @@ function waitlistTemplate() {
     '',
     "Thanks for joining the Nomad.PoE wait list. You're in line — we'll email this address the moment it's available to order.",
     '',
-    'In the meantime, here’s what Nomad.PoE is: [1-2 line product blurb].',
+    ‘nomad.poe is a battery-powered PoE field tool — power and a gigabit network for your camera in one compact box, no AC required. Built for techs who do the work.’,
     '',
     'Questions? Just reply to this email.',
     '',
