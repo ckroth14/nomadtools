@@ -400,6 +400,16 @@ footer {
   flex-shrink: 0;
 }
 
+/* HONEYPOT — must stay invisible to humans, visible to bots */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .nav-links { display: none; }
