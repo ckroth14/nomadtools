@@ -238,15 +238,15 @@
         <h2>Get on the list</h2>
         <p>This goes straight to our team — no third-party signup, no spam. The more detail you give us, the better we can prioritize builds.</p>
 
-        <form class="wl-form" id="wlForm">
+        <form class="wl-form js-subscribe-form" id="wlForm" data-list="waitlist" data-source="waitlist-page" data-success-message="You're on the list — we'll be in touch when units are ready.">
           <div class="wl-row">
             <div class="wl-field">
               <label for="wlName">Full name</label>
-              <input type="text" id="wlName" placeholder="Jane Smith" required />
+              <input type="text" id="wlName" name="full_name" placeholder="Jane Smith" required />
             </div>
             <div class="wl-field">
               <label for="wlEmail">Email</label>
-              <input type="email" id="wlEmail" placeholder="jane@company.com" required />
+              <input type="email" id="wlEmail" name="email" placeholder="jane@company.com" required />
             </div>
           </div>
 
@@ -298,13 +298,9 @@
             <textarea id="wlNotes" placeholder="Timeline, jobsite conditions, integrations you need..."></textarea>
           </div>
 
+          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <button type="submit" class="btn btn-red wl-submit">Reserve my spot</button>
         </form>
-
-        <div class="wl-success" id="wlSuccess">
-          <h3>You're on the list.</h3>
-          <p>We've got your details — expect an email as units become available.</p>
-        </div>
       </div>
 
       <!-- RIGHT COLUMN -->
@@ -313,11 +309,11 @@
           <span class="tag tag-red">Membership</span>
           <h2>Just want updates?</h2>
           <p>Drop your email for release news and field-tool announcements. No commitment, no form to fill out.</p>
-          <form class="member-form" id="memberForm">
-            <input type="email" id="memberEmail" placeholder="your@email.com" required />
+          <form class="member-form js-subscribe-form" id="memberForm" data-list="membership" data-source="membership-waitlist" data-success-message="Thanks — you're subscribed.">
+            <input type="email" id="memberEmail" name="email" placeholder="your@email.com" required />
+            <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <button type="submit" class="btn btn-outline-white">Subscribe</button>
           </form>
-          <p class="member-success" id="memberSuccess">Thanks — you're subscribed.</p>
           <p class="member-note">No spam. Unsubscribe anytime.</p>
         </div>
 
@@ -361,19 +357,9 @@
       mobileMenu.classList.remove('open');
     });
   });
-
-  document.getElementById('wlForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    this.classList.add('hide');
-    document.getElementById('wlSuccess').classList.add('show');
-  });
-
-  document.getElementById('memberForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    this.classList.add('hide');
-    document.getElementById('memberSuccess').classList.add('show');
-  });
 </script>
+
+<script src="forms.js" defer></script>
 
 </body>
 </html>

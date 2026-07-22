@@ -195,11 +195,7 @@
     });
   });
 
-  document.getElementById('aboutMemberForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    this.style.display = 'none';
-    document.getElementById('aboutMemberSuccess').style.display = 'block';
-  });
+
 </script>
 
 <div class="page">
@@ -250,13 +246,19 @@
       <div class="contact-block">
         <span class="tag">Contact</span>
         <h2>Get in touch</h2>
-        <p>Want updates on nomad.poe and new Nomad Tools releases? Drop your email below. For bulk orders, dealer inquiries, or product questions, email us directly at <a href="mailto:info@nomadtools.us" style="color:var(--red);">info@nomadtools.us</a>.</p>
-        <form class="contact-form js-subscribe-form" data-list="membership" data-source="membership-about" data-success-message="You're on the list — check your inbox for a confirmation.">
-          <input type="email" name="email" placeholder="your@email.com" required />
-          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <button type="submit" class="btn btn-red" style="text-align:center;">Join the list</button>
-        </form>
-        <p class="download-note" style="margin-top:0.75rem;">We'll only use your email to send Nomad Tools updates. No spam, unsubscribe anytime.</p>
+        <p>Questions about the device, bulk orders, or dealer inquiries — reach out directly.</p>
+        <p style="font-size:1.1rem; font-weight:600; color:var(--text-dark); margin-bottom:1.5rem;"><a href="mailto:info@nomadtools.us">info@nomadtools.us</a></p>
+
+        <div style="border-top:1px solid #eee; padding-top:1.5rem;">
+          <h2 style="margin-bottom:0.35rem;">Join the membership</h2>
+          <p>Get release news and field-tool announcements.</p>
+          <form class="contact-form js-subscribe-form" data-list="membership" data-source="membership-about" data-success-message="Thanks — you're subscribed.">
+            <input type="email" name="email" placeholder="your@email.com" required />
+            <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button type="submit" class="btn btn-red" style="text-align:center;">Join</button>
+          </form>
+          <p style="font-size:0.7rem; color:#999; margin-top:0.6rem;">No spam. Unsubscribe anytime.</p>
+        </div>
       </div>
 
       <!-- DESIGN CREDIT -->
