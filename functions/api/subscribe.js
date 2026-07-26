@@ -160,7 +160,7 @@ function waitlistTemplate() {
     '',
     "Thanks for joining the Nomad.PoE wait list. You're in line — we'll email this address the moment it's available to order.",
     '',
-    ‘nomad.poe is a battery-powered PoE field tool — power and a gigabit network for your camera in one compact box, no AC required. Built for techs who do the work.’,
+    'nomad.poe is a battery-powered PoE field tool — power and a gigabit network for your camera in one compact box, no AC required. Built for techs who do the work.',
     '',
     'Questions? Just reply to this email.',
     '',
