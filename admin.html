@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Signups — Nomad Tools Admin</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: var(--bg-light); }
+
+  .admin-wrap { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+  .admin-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-head h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+  }
+
+  /* LOGIN */
+  .login-card {
+    max-width: 360px;
+    margin: 6rem auto 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .login-card h1 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.4rem;
+  }
+
+  .login-card p { font-size: 0.85rem; color: var(--text-mid); margin-bottom: 1.25rem; }
+
+  .login-card input {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+
+  .login-card .btn { width: 100%; text-align: center; }
+
+  .login-error {
+    color: var(--red);
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    min-height: 1rem;
+  }
+
+  /* STATS */
+  .stat-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+  .stat {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    min-width: 120px;
+  }
+
+  .stat .num { font-size: 1.6rem; font-weight: 600; color: var(--text-dark); letter-spacing: -0.02em; }
+  .stat .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-mid); margin-top: 0.2rem; }
+  .stat.red .num { color: var(--red); }
+
+  /* TABLE */
+  .table-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .table-scroll { overflow-x: auto; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+
+  th, td { padding: 0.7rem 1rem; text-align: left; white-space: nowrap; }
+
+  th {
+    background: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-mid);
+    font-weight: 600;
+  }
+
+  td { border-bottom: 1px solid #f0f0f0; color: var(--text-dark); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fcfcfc; }
+
+  .pill {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.15rem 0.55rem;
+    border-radius: 20px;
+    letter-spacing: 0.02em;
+  }
+  .pill.waitlist { background: rgba(227,30,36,0.1); color: var(--red); }
+  .pill.membership { background: #eee; color: var(--text-mid); }
+
+  .toolbar { display: flex; gap: 0.5rem; }
+
+  .btn-sm { padding: 0.45rem 0.9rem; font-size: 0.8rem; }
+
+  .empty { padding: 3rem 1rem; text-align: center; color: var(--text-mid); font-size: 0.9rem; }
+
+  .muted { color: #999; font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN VIEW -->
+<div id="loginView">
+  <div class="login-card">
+    <h1>Nomad Tools Admin</h1>
+    <p>Enter the admin password to view signups.</p>
+    <form id="loginForm">
+      <input type="password" id="pw" placeholder="Password" autocomplete="current-password" autofocus />
+      <button type="submit" class="btn btn-red">View signups</button>
+    </form>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- DATA VIEW -->
+<div id="dataView" style="display:none;">
+  <div class="admin-wrap">
+    <div class="admin-head">
+      <h1>Signups</h1>
+      <div class="toolbar">
+        <button class="btn btn-outline btn-sm" id="refreshBtn">Refresh</button>
+        <button class="btn btn-red btn-sm" id="csvBtn">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num" id="statTotal">—</div><div class="lbl">Total</div></div>
+      <div class="stat red"><div class="num" id="statWaitlist">—</div><div class="lbl">Waitlist</div></div>
+      <div class="stat"><div class="num" id="statMembership">—</div><div class="lbl">Membership</div></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Email</th><th>List</th><th>Source</th><th>Country</th><th>Date (UTC)</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="emptyMsg" style="display:none;">No signups yet.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const loginView = document.getElementById('loginView');
+  const dataView = document.getElementById('dataView');
+  const loginForm = document.getElementById('loginForm');
+  const pwInput = document.getElementById('pw');
+  const loginError = document.getElementById('loginError');
+
+  let currentRows = [];
+
+  // Keep the password only in memory for this tab session so a refresh
+  // re-fetches without re-prompting, but it's gone when the tab closes.
+  let sessionPw = sessionStorage.getItem('ntadmin') || '';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
+
+  async function fetchSignups(password) {
+    const res = await fetch('/api/signups', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) {
+      const err = new Error(data.error || 'Request failed.');
+      err.status = res.status;
+      throw err;
+    }
+    return data.rows;
+  }
+
+  function render(rows) {
+    currentRows = rows;
+    document.getElementById('statTotal').textContent = rows.length;
+    document.getElementById('statWaitlist').textContent = rows.filter(r => r.list === 'waitlist').length;
+    document.getElementById('statMembership').textContent = rows.filter(r => r.list === 'membership').length;
+
+    const tbody = document.getElementById('rows');
+    const emptyMsg = document.getElementById('emptyMsg');
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      emptyMsg.style.display = 'block';
+      return;
+    }
+    emptyMsg.style.display = 'none';
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td class="muted">${esc(r.id)}</td>
+        <td>${esc(r.email)}</td>
+        <td><span class="pill ${esc(r.list)}">${esc(r.list)}</span></td>
+        <td>${r.source ? esc(r.source) : '<span class="muted">—</span>'}</td>
+        <td>${r.ip_country ? esc(r.ip_country) : '<span class="muted">—</span>'}</td>
+        <td>${esc(r.created_at)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function showData() {
+    loginView.style.display = 'none';
+    dataView.style.display = 'block';
+  }
+
+  async function load(password) {
+    const rows = await fetchSignups(password);
+    sessionPw = password;
+    sessionStorage.setItem('ntadmin', password);
+    render(rows);
+    showData();
+  }
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginError.textContent = '';
+    const btn = loginForm.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Checking…';
+    try {
+      await load(pwInput.value);
+    } catch (err) {
+      loginError.textContent = err.status === 401 ? 'Wrong password.' : (err.message || 'Something went wrong.');
+      pwInput.select();
+    } finally {
+      btn.disabled = false; btn.textContent = 'View signups';
+    }
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('refreshBtn');
+    btn.disabled = true; btn.textContent = 'Refreshing…';
+    try { render(await fetchSignups(sessionPw)); }
+    catch (err) {
+      if (err.status === 401) { sessionStorage.removeItem('ntadmin'); location.reload(); }
+    }
+    finally { btn.disabled = false; btn.textContent = 'Refresh'; }
+  });
+
+  document.getElementById('csvBtn').addEventListener('click', () => {
+    const cols = ['id', 'email', 'list', 'source', 'referral_reason', 'ip_country', 'created_at'];
+    const escCsv = v => {
+      const s = v == null ? '' : String(v);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const lines = [cols.join(',')].concat(
+      currentRows.map(r => cols.map(c => escCsv(r[c])).join(','))
+    );
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'nomadtools-signups-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // Auto-load if we already have a password from this tab session.
+  if (sessionPw) {
+    load(sessionPw).catch(() => { sessionStorage.removeItem('ntadmin'); });
+  }
+</script>
+
+</body>
+</html>
