@@ -78,19 +78,103 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: 'Something went wrong. Please try again.' }, 500);
   }
 
-  // Best-effort send. Row is already saved, so a bounce/API hiccup here
+  // Best-effort sends. Row is already saved, so a bounce/API hiccup here
   // never turns into a lost signup.
   if (env.RESEND_API_KEY) {
+    // 1) Notify the team of the new lead — sent to info@nomadtools.us with
+    //    the full submission. This is the important one for follow-up.
+    try {
+      await sendAdminNotification(env, cleanEmail, list, cleanSource, ipCountry, detailsJson);
+    } catch (err) {
+      console.error('Admin notification failed:', err);
+    }
+    // 2) Confirmation/welcome email to the person who signed up.
     try {
       await sendConfirmationEmail(env, cleanEmail, list);
     } catch (err) {
-      console.error('Resend send failed:', err);
+      console.error('Confirmation email failed:', err);
     }
   } else {
-    console.error('RESEND_API_KEY is not set — skipping confirmation email.');
+    console.error('RESEND_API_KEY is not set — skipping emails.');
   }
 
   return jsonResponse({ ok: true }, 200);
+}
+
+// Emails info@nomadtools.us for every signup so the team is notified of new
+// leads in real time. Includes all captured form fields, and sets reply_to
+// to the signer so a reply goes straight back to them.
+async function sendAdminNotification(env, email, list, source, ipCountry, detailsJson) {
+  let details = {};
+  if (detailsJson) {
+    try { details = JSON.parse(detailsJson) || {}; } catch (e) { details = {}; }
+  }
+
+  const labels = {
+    full_name: 'Full name',
+    company: 'Company / Crew',
+    phone: 'Phone',
+    battery: 'Battery platform',
+    use_case: 'Primary use case',
+    quantity: 'Quantity',
+    notes: 'Notes',
+  };
+  const order = ['full_name', 'company', 'phone', 'battery', 'use_case', 'quantity', 'notes'];
+  const keys = order.filter((k) => details[k]).concat(
+    Object.keys(details).filter((k) => !order.includes(k))
+  );
+
+  const detailRows = keys.map((k) =>
+    `<tr><td style="padding:6px 16px 6px 0; color:#666; white-space:nowrap; vertical-align:top; font-size:13px;">${escHtml(labels[k] || k)}</td>` +
+    `<td style="padding:6px 0; color:#1a1a1a; font-size:14px;">${escHtml(details[k])}</td></tr>`
+  ).join('');
+
+  const metaRows =
+    `<tr><td style="padding:6px 16px 6px 0; color:#666; white-space:nowrap; font-size:13px;">Email</td><td style="padding:6px 0; font-size:14px;"><a href="mailto:${escHtml(email)}">${escHtml(email)}</a></td></tr>` +
+    `<tr><td style="padding:6px 16px 6px 0; color:#666; white-space:nowrap; font-size:13px;">List</td><td style="padding:6px 0; color:#1a1a1a; font-size:14px;">${escHtml(list)}</td></tr>` +
+    (source ? `<tr><td style="padding:6px 16px 6px 0; color:#666; white-space:nowrap; font-size:13px;">Source</td><td style="padding:6px 0; color:#1a1a1a; font-size:14px;">${escHtml(source)}</td></tr>` : '') +
+    (ipCountry ? `<tr><td style="padding:6px 16px 6px 0; color:#666; white-space:nowrap; font-size:13px;">Country</td><td style="padding:6px 0; color:#1a1a1a; font-size:14px;">${escHtml(ipCountry)}</td></tr>` : '');
+
+  const heading = list === 'waitlist' ? 'New waitlist signup' : 'New membership signup';
+  const nameSuffix = details.full_name ? ` — ${details.full_name}` : '';
+  const subject = `${heading}${nameSuffix} (${email})`;
+
+  const html = emailShell(`
+    <h1 style="margin:0 0 16px; font-size:20px; color:#1a1a1a;">${escHtml(heading)}</h1>
+    <table style="border-collapse:collapse; width:100%;">${metaRows}${detailRows}</table>
+  `);
+
+  const textLines = [heading, '', `Email: ${email}`, `List: ${list}`];
+  if (source) textLines.push(`Source: ${source}`);
+  if (ipCountry) textLines.push(`Country: ${ipCountry}`);
+  keys.forEach((k) => textLines.push(`${labels[k] || k}: ${details[k]}`));
+
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'Nomad Tools <info@nomadtools.us>',
+      to: 'info@nomadtools.us',
+      reply_to: email,
+      subject,
+      html,
+      text: textLines.join('\n'),
+    }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '');
+    throw new Error(`Resend API error ${res.status}: ${detail}`);
+  }
+}
+
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
 }
 
 async function sendConfirmationEmail(env, email, list) {
