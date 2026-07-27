@@ -216,7 +216,11 @@ function jsonResponse(data, status) {
 // LOGO_URL once a real email-safe logo file exists.
 // ---------------------------------------------------------------------------
 
-const LOGO_URL = 'https://nomadtools.us/logo-email.png'; // TODO (human): see SETUP.md
+// Brand nav lockup: red "nomad" wordmark + red signal swirl, both on a solid
+// black background. The email header band is black too, so the logos' baked
+// backgrounds blend seamlessly (no visible box).
+const LOGO_WORDMARK_URL = 'https://nomadtools.us/logo-nomad-text.png';
+const LOGO_SIGNAL_URL = 'https://nomadtools.us/logo-signal.png';
 
 function emailShell(bodyHtml) {
   return `<!DOCTYPE html>
@@ -227,9 +231,13 @@ function emailShell(bodyHtml) {
         <td align="center">
           <table role="presentation" width="100%" style="max-width:520px; background:#ffffff; border-radius:6px; overflow:hidden;" cellpadding="0" cellspacing="0">
             <tr>
-              <td style="background:#E31E24; padding:20px 32px;">
-                <!-- TODO (human): drop in the real logo file per SETUP.md, then this renders it. -->
-                <img src="${LOGO_URL}" alt="Nomad Tools" height="28" style="display:block; border:0; outline:none;" />
+              <td style="background:#000000; padding:22px 32px; border-bottom:3px solid #E31E24;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="vertical-align:middle;"><img src="${LOGO_WORDMARK_URL}" alt="nomad" height="26" style="display:block; border:0; outline:none;" /></td>
+                    <td style="vertical-align:middle; padding-left:2px;"><img src="${LOGO_SIGNAL_URL}" alt="" height="32" style="display:block; border:0; outline:none;" /></td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
