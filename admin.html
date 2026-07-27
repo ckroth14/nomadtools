@@ -124,6 +124,46 @@
   .empty { padding: 3rem 1rem; text-align: center; color: var(--text-mid); font-size: 0.9rem; }
 
   .muted { color: #999; font-style: italic; }
+
+  /* EXPANDABLE ROWS */
+  tr.has-details { cursor: pointer; }
+  tr.has-details:hover td { background: #fbf4f4; }
+
+  .caret {
+    display: inline-block;
+    width: 0.9rem;
+    color: var(--red);
+    transition: transform 0.15s;
+    font-size: 0.75rem;
+  }
+  tr.open .caret { transform: rotate(90deg); }
+
+  td.caret-cell { width: 1.4rem; padding-right: 0; text-align: center; }
+
+  .detail-row td {
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0;
+  }
+
+  .detail-panel {
+    padding: 1rem 1.5rem 1.25rem 2.9rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.9rem 1.5rem;
+  }
+
+  .detail-item .k {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-mid);
+    margin-bottom: 0.15rem;
+  }
+  .detail-item .v { font-size: 0.88rem; color: var(--text-dark); white-space: normal; word-break: break-word; }
+  .detail-item.wide { grid-column: 1 / -1; }
+
+  .no-detail { padding: 0.9rem 1.5rem 0.9rem 2.9rem; font-size: 0.8rem; color: #999; font-style: italic; }
 </style>
 </head>
 <body>
@@ -163,7 +203,7 @@
         <table>
           <thead>
             <tr>
-              <th>#</th><th>Email</th><th>List</th><th>Source</th><th>Country</th><th>Date (UTC)</th>
+              <th></th><th>#</th><th>Email</th><th>List</th><th>Source</th><th>Country</th><th>Date (UTC)</th>
             </tr>
           </thead>
           <tbody id="rows"></tbody>
@@ -222,8 +262,14 @@
       return;
     }
     emptyMsg.style.display = 'none';
-    tbody.innerHTML = rows.map(r => `
-      <tr>
+    tbody.innerHTML = rows.map(r => {
+      const parsed = parseDetails(r.details);
+      const expandable = r.list === 'waitlist';
+      const cls = expandable ? 'has-details' : '';
+      const caret = expandable ? '<span class="caret">▸</span>' : '';
+      return `
+      <tr class="${cls}" data-id="${esc(r.id)}">
+        <td class="caret-cell">${caret}</td>
         <td class="muted">${esc(r.id)}</td>
         <td>${esc(r.email)}</td>
         <td><span class="pill ${esc(r.list)}">${esc(r.list)}</span></td>
@@ -231,7 +277,47 @@
         <td>${r.ip_country ? esc(r.ip_country) : '<span class="muted">—</span>'}</td>
         <td>${esc(r.created_at)}</td>
       </tr>
-    `).join('');
+      ${expandable ? `<tr class="detail-row" data-detail="${esc(r.id)}" style="display:none;">
+        <td colspan="7">${renderDetailPanel(parsed)}</td>
+      </tr>` : ''}`;
+    }).join('');
+  }
+
+  // Friendly labels for the known waitlist fields; unknown keys fall back
+  // to a title-cased version of the key.
+  const FIELD_LABELS = {
+    full_name: 'Full name',
+    company: 'Company / Crew',
+    phone: 'Phone',
+    battery: 'Battery platform',
+    use_case: 'Primary use case',
+    quantity: 'Quantity',
+    notes: 'Notes',
+  };
+  const FIELD_ORDER = ['full_name', 'company', 'phone', 'battery', 'use_case', 'quantity', 'notes'];
+
+  function parseDetails(raw) {
+    if (!raw) return null;
+    try { const o = JSON.parse(raw); return (o && typeof o === 'object') ? o : null; }
+    catch (e) { return null; }
+  }
+
+  function labelFor(key) {
+    return FIELD_LABELS[key] || key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function renderDetailPanel(d) {
+    if (!d || !Object.keys(d).length) {
+      return '<div class="no-detail">No extra form data captured for this signup.</div>';
+    }
+    const keys = FIELD_ORDER.filter(k => d[k]).concat(
+      Object.keys(d).filter(k => !FIELD_ORDER.includes(k))
+    );
+    const items = keys.map(k => {
+      const wide = k === 'notes' ? ' wide' : '';
+      return `<div class="detail-item${wide}"><div class="k">${esc(labelFor(k))}</div><div class="v">${esc(d[k])}</div></div>`;
+    }).join('');
+    return `<div class="detail-panel">${items}</div>`;
   }
 
   function showData() {
@@ -262,6 +348,18 @@
     }
   });
 
+  // Expand/collapse a waitlist row to reveal its full form details.
+  document.getElementById('rows').addEventListener('click', (e) => {
+    const tr = e.target.closest('tr.has-details');
+    if (!tr) return;
+    const id = tr.getAttribute('data-id');
+    const detail = document.querySelector('.detail-row[data-detail="' + id + '"]');
+    if (!detail) return;
+    const open = detail.style.display !== 'none';
+    detail.style.display = open ? 'none' : 'table-row';
+    tr.classList.toggle('open', !open);
+  });
+
   document.getElementById('refreshBtn').addEventListener('click', async () => {
     const btn = document.getElementById('refreshBtn');
     btn.disabled = true; btn.textContent = 'Refreshing…';
@@ -273,13 +371,18 @@
   });
 
   document.getElementById('csvBtn').addEventListener('click', () => {
-    const cols = ['id', 'email', 'list', 'source', 'referral_reason', 'ip_country', 'created_at'];
+    const baseCols = ['id', 'email', 'list', 'source', 'ip_country', 'created_at'];
+    const detailCols = FIELD_ORDER; // full_name, company, phone, battery, use_case, quantity, notes
+    const cols = baseCols.concat(detailCols);
     const escCsv = v => {
       const s = v == null ? '' : String(v);
       return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
     };
     const lines = [cols.join(',')].concat(
-      currentRows.map(r => cols.map(c => escCsv(r[c])).join(','))
+      currentRows.map(r => {
+        const d = parseDetails(r.details) || {};
+        return cols.map(c => escCsv(baseCols.includes(c) ? r[c] : d[c])).join(',');
+      })
     );
     const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a');

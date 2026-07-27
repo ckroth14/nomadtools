@@ -253,17 +253,17 @@
           <div class="wl-row">
             <div class="wl-field">
               <label for="wlCompany">Company / Crew</label>
-              <input type="text" id="wlCompany" placeholder="Acme Networks" />
+              <input type="text" id="wlCompany" name="company" placeholder="Acme Networks" />
             </div>
             <div class="wl-field">
               <label for="wlPhone">Phone (optional)</label>
-              <input type="tel" id="wlPhone" placeholder="(555) 555-0100" />
+              <input type="tel" id="wlPhone" name="phone" placeholder="(555) 555-0100" />
             </div>
           </div>
 
           <div class="wl-field">
             <label for="wlBattery">Battery platform</label>
-            <select id="wlBattery">
+            <select id="wlBattery" name="battery">
               <option>Makita</option>
               <option>Milwaukee</option>
               <option>DeWalt</option>
@@ -274,7 +274,7 @@
           <div class="wl-row">
             <div class="wl-field">
               <label for="wlUse">Primary use case</label>
-              <select id="wlUse">
+              <select id="wlUse" name="use_case">
                 <option>IP camera deployment</option>
                 <option>Wireless bridge / PtP</option>
                 <option>Access control / intercom</option>
@@ -284,7 +284,7 @@
             </div>
             <div class="wl-field">
               <label for="wlQty">Quantity interested</label>
-              <select id="wlQty">
+              <select id="wlQty" name="quantity">
                 <option>1–2 units</option>
                 <option>3–9 units</option>
                 <option>10–25 units</option>
@@ -295,7 +295,7 @@
 
           <div class="wl-field">
             <label for="wlNotes">Anything else we should know?</label>
-            <textarea id="wlNotes" placeholder="Timeline, jobsite conditions, integrations you need..."></textarea>
+            <textarea id="wlNotes" name="notes" placeholder="Timeline, jobsite conditions, integrations you need..."></textarea>
           </div>
 
           <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />

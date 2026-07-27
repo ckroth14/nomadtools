@@ -21,7 +21,7 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: 'Invalid request body.' }, 400);
   }
 
-  const { email, list, source, reason, website } = body || {};
+  const { email, list, source, reason, website, details } = body || {};
 
   // Honeypot tripped — act like everything worked, save nothing.
   if (website) {
@@ -41,6 +41,23 @@ export async function onRequestPost(context) {
   const cleanReason = typeof reason === 'string' && reason.trim() ? reason.trim().slice(0, 120) : null;
   const ipCountry = request.headers.get('cf-ipcountry') || null;
 
+  // Extra form fields (name, company, phone, battery, use case, quantity,
+  // notes, …) arrive as a { key: value } object and get stored as a JSON
+  // blob in the details column. Sanitize to string values only, capped.
+  let detailsJson = null;
+  if (details && typeof details === 'object' && !Array.isArray(details)) {
+    const clean = {};
+    for (const key of Object.keys(details).slice(0, 30)) {
+      const val = details[key];
+      if (typeof val === 'string' && val.trim()) {
+        clean[String(key).slice(0, 60)] = val.trim().slice(0, 500);
+      }
+    }
+    if (Object.keys(clean).length) {
+      detailsJson = JSON.stringify(clean).slice(0, 4000);
+    }
+  }
+
   if (!env.DB) {
     console.error('D1 binding "DB" is not configured for this environment.');
     return jsonResponse({ error: 'Something went wrong. Please try again.' }, 500);
@@ -48,11 +65,13 @@ export async function onRequestPost(context) {
 
   try {
     await env.DB.prepare(
-      `INSERT INTO signups (email, list, source, referral_reason, ip_country)
-       VALUES (?, ?, ?, ?, ?)
-       ON CONFLICT(email, list) DO NOTHING`
+      `INSERT INTO signups (email, list, source, referral_reason, ip_country, details)
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT(email, list) DO UPDATE SET
+         details = COALESCE(excluded.details, signups.details),
+         source = COALESCE(excluded.source, signups.source)`
     )
-      .bind(cleanEmail, list, cleanSource, cleanReason, ipCountry)
+      .bind(cleanEmail, list, cleanSource, cleanReason, ipCountry, detailsJson)
       .run();
   } catch (err) {
     console.error('D1 insert failed:', err);

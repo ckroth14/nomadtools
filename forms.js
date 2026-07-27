@@ -40,6 +40,19 @@
       btn.textContent = 'Submitting…';
     }
 
+    // Collect every other named field (full name, company, phone, battery,
+    // use case, quantity, notes, …) into a details object so the whole
+    // waitlist form is captured, not just the email.
+    var reserved = { email: 1, website: 1, reason: 1, list: 1, source: 1 };
+    var details = {};
+    var hasDetails = false;
+    for (var i = 0; i < form.elements.length; i++) {
+      var el = form.elements[i];
+      if (!el.name || reserved[el.name] || el.type === 'submit') continue;
+      var val = (el.value || '').trim();
+      if (val) { details[el.name] = val.slice(0, 500); hasDetails = true; }
+    }
+
     fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -49,6 +62,7 @@
         source: source,
         reason: reasonInput ? reasonInput.value : undefined,
         website: honeypot ? honeypot.value : '',
+        details: hasDetails ? details : undefined,
       }),
     })
       .then(function (res) {

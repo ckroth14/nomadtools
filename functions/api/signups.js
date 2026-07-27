@@ -34,7 +34,7 @@ export async function onRequestPost(context) {
 
   try {
     const { results } = await env.DB.prepare(
-      `SELECT id, email, list, source, referral_reason, ip_country, created_at
+      `SELECT id, email, list, source, referral_reason, ip_country, created_at, details
        FROM signups
        ORDER BY created_at DESC`
     ).all();
