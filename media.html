@@ -258,13 +258,9 @@
     </div>
 
     <div class="media-section active" id="tab-photos">
-      <div class="photo-grid">
-        <div class="photo-card"><img src="Art/annot_main.png" alt="nomad.ip ToolBox — main view" /></div>
-        <div class="photo-card"><img src="Art/annot_second.png" alt="nomad.ip ToolBox — scanner" /></div>
-        <div class="photo-card"><img src="Art/annot_third.png" alt="nomad.ip ToolBox — tools" /></div>
-        <div class="photo-card"><img src="Art/poe_top_annotated_v2.png" alt="nomad.poe — top view" /></div>
-        <div class="photo-card"><img src="Art/strap_poe.png" alt="nomad.poe — shoulder strap" /></div>
-        <div class="photo-card"><img src="Art/nomadiptoolbox_app_all.png" alt="nomad.ip ToolBox — full workspace" /></div>
+      <div class="photo-grid" id="photoGrid"></div>
+      <div class="coming-banner" id="photoEmpty" style="display:none;">
+        <p>Photos coming soon. <a href="waitlist.html">Join the waitlist</a> to get notified.</p>
       </div>
     </div>
 
@@ -328,6 +324,32 @@
     <p class="footer-copy">© 2025 Nomad Tools · nomadtools.us</p>
   </div>
 </footer>
+
+<script>
+  // Photos are driven by photos/photos.json so new images can be added without
+  // editing this page — drop the file in /photos and add a line to the list.
+  (function () {
+    var grid = document.getElementById('photoGrid');
+    var empty = document.getElementById('photoEmpty');
+    if (!grid) return;
+    function showEmpty() { if (empty) empty.style.display = 'block'; }
+    fetch('photos/photos.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (list) {
+        if (!Array.isArray(list) || !list.length) { showEmpty(); return; }
+        var html = list.map(function (p) {
+          var file = (p && p.file) ? String(p.file) : '';
+          if (!file) return '';
+          var cap = (p && p.caption) ? String(p.caption) : '';
+          var safe = cap.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+          return '<div class="photo-card"><img src="photos/' + encodeURI(file) +
+                 '" alt="' + safe + '" title="' + safe + '" loading="lazy" /></div>';
+        }).join('');
+        if (html.trim()) { grid.innerHTML = html; } else { showEmpty(); }
+      })
+      .catch(showEmpty);
+  })();
+</script>
 
 </body>
 </html>
