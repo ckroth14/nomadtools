@@ -1,10 +1,11 @@
 // POST /api/signups
-// Body: { password }
+// Body: { password, action?, id? }
 //
-// Returns every row in the signups table if the password matches the
-// ADMIN_PASSWORD environment secret, otherwise 401. Read-only — this
-// endpoint never modifies data. Password is sent in the POST body (not
-// the URL) so it stays out of server logs and browser history.
+// Requires the password to match the ADMIN_PASSWORD environment secret,
+// otherwise 401. Password is sent in the POST body (not the URL) so it stays
+// out of server logs and browser history.
+//   - action omitted / "list": returns every row in the signups table
+//   - action "delete" (+ id):  deletes that one row, returns the new count
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -32,6 +33,25 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: 'Database not configured.' }, 500);
   }
 
+  const action = body && typeof body.action === 'string' ? body.action : 'list';
+
+  // Delete a single signup by id.
+  if (action === 'delete') {
+    const id = body && Number.isInteger(body.id) ? body.id : parseInt(body && body.id, 10);
+    if (!Number.isInteger(id) || id <= 0) {
+      return jsonResponse({ error: 'A valid signup id is required.' }, 400);
+    }
+    try {
+      const res = await env.DB.prepare('DELETE FROM signups WHERE id = ?').bind(id).run();
+      const deleted = res && res.meta ? res.meta.changes : undefined;
+      return jsonResponse({ ok: true, deleted: deleted }, 200);
+    } catch (err) {
+      console.error('D1 delete failed:', err);
+      return jsonResponse({ error: 'Delete failed.' }, 500);
+    }
+  }
+
+  // Default: list all signups.
   try {
     const { results } = await env.DB.prepare(
       `SELECT id, email, list, source, referral_reason, ip_country, created_at, details

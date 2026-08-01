@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found — Nomad Tools</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .nf-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 5rem 1.5rem 6rem;
+  }
+  .nf-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 4.5rem;
+    font-weight: 500;
+    color: var(--red);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .nf-wrap h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+  }
+  .nf-wrap p {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .nf-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .nf-links {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #ddd;
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .nf-links a {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nf-links a:hover { color: var(--red); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img class="nav-logo-nomad" src="logo-nomad-text.png" alt="nomad" />
+    <img class="nav-logo-signal" src="logo-signal.png" alt="" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="nomad-poe.html">nomad.poe</a></li>
+    <li><a href="toolbox.html">IP ToolBox</a></li>
+    <li><a href="media.html">Media</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="waitlist.html" class="nav-cta">Waitlist</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="nomad-poe.html">nomad.poe</a>
+  <a href="toolbox.html">IP ToolBox</a>
+  <a href="media.html">Media</a>
+  <a href="about.html">About</a>
+  <a href="waitlist.html" class="nav-cta">Join Waitlist</a>
+</div>
+
+<div class="page">
+  <div class="nf-wrap">
+    <div class="nf-code">404</div>
+    <h1>Page not found</h1>
+    <p>This page moved, got unplugged, or never existed. Let's get you back on the network.</p>
+    <div class="nf-actions">
+      <a href="index.html" class="btn btn-red">Back to Home</a>
+      <a href="toolbox.html" class="btn btn-outline">Free IP ToolBox</a>
+    </div>
+    <div class="nf-links">
+      <a href="nomad-poe.html">nomad.poe</a>
+      <a href="toolbox.html">IP ToolBox</a>
+      <a href="media.html">Media</a>
+      <a href="about.html">About</a>
+      <a href="waitlist.html">Waitlist</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-nomad-text.png" alt="Nomad" /></div>
+    <ul class="footer-links">
+      <li><a href="nomad-poe.html">nomad.poe</a></li>
+      <li><a href="toolbox.html">IP ToolBox</a></li>
+      <li><a href="media.html">Media</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Nomad Tools · nomadtools.us</p>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

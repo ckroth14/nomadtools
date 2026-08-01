@@ -164,6 +164,22 @@
   .detail-item.wide { grid-column: 1 / -1; }
 
   .no-detail { padding: 0.9rem 1.5rem 0.9rem 2.9rem; font-size: 0.8rem; color: #999; font-style: italic; }
+
+  /* DELETE BUTTON */
+  td.act-cell { text-align: right; width: 1px; white-space: nowrap; }
+  .del-btn {
+    width: 26px; height: 26px;
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #bbb;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .del-btn:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
+  .del-btn:disabled { opacity: 0.5; cursor: default; }
 </style>
 </head>
 <body>
@@ -203,7 +219,7 @@
         <table>
           <thead>
             <tr>
-              <th></th><th>#</th><th>Email</th><th>List</th><th>Source</th><th>Country</th><th>Date (UTC)</th>
+              <th></th><th>#</th><th>Email</th><th>List</th><th>Source</th><th>Country</th><th>Date (UTC)</th><th></th>
             </tr>
           </thead>
           <tbody id="rows"></tbody>
@@ -276,9 +292,10 @@
         <td>${r.source ? esc(r.source) : '<span class="muted">—</span>'}</td>
         <td>${r.ip_country ? esc(r.ip_country) : '<span class="muted">—</span>'}</td>
         <td>${esc(r.created_at)}</td>
+        <td class="act-cell"><button type="button" class="del-btn" data-id="${esc(r.id)}" data-email="${esc(r.email)}" title="Delete this signup" aria-label="Delete signup">✕</button></td>
       </tr>
       ${expandable ? `<tr class="detail-row" data-detail="${esc(r.id)}" style="display:none;">
-        <td colspan="7">${renderDetailPanel(parsed)}</td>
+        <td colspan="8">${renderDetailPanel(parsed)}</td>
       </tr>` : ''}`;
     }).join('');
   }
@@ -350,6 +367,7 @@
 
   // Expand/collapse a waitlist row to reveal its full form details.
   document.getElementById('rows').addEventListener('click', (e) => {
+    if (e.target.closest('.del-btn')) return; // handled separately
     const tr = e.target.closest('tr.has-details');
     if (!tr) return;
     const id = tr.getAttribute('data-id');
@@ -358,6 +376,32 @@
     const open = detail.style.display !== 'none';
     detail.style.display = open ? 'none' : 'table-row';
     tr.classList.toggle('open', !open);
+  });
+
+  // Delete a signup (with confirmation), then refresh the table.
+  document.getElementById('rows').addEventListener('click', async (e) => {
+    const btn = e.target.closest('.del-btn');
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
+    const email = btn.getAttribute('data-email') || 'this signup';
+    if (!confirm('Delete ' + email + '? This cannot be undone.')) return;
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/signups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: sessionPw, action: 'delete', id: Number(id) }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        if (res.status === 401) { sessionStorage.removeItem('ntadmin'); location.reload(); return; }
+        throw new Error(data.error || 'Delete failed.');
+      }
+      render(await fetchSignups(sessionPw));
+    } catch (err) {
+      alert(err.message || 'Delete failed.');
+      btn.disabled = false;
+    }
   });
 
   document.getElementById('refreshBtn').addEventListener('click', async () => {

@@ -210,10 +210,6 @@ function jsonResponse(data, status) {
 
 // ---------------------------------------------------------------------------
 // Email templates — inline CSS only (email clients strip <style> blocks).
-//
-// TODO (human): the copy below is placeholder text straight from the build
-// brief. Swap in final copy when it's ready. See SETUP.md for how to update
-// LOGO_URL once a real email-safe logo file exists.
 // ---------------------------------------------------------------------------
 
 // Brand nav lockup: red "nomad" wordmark + red signal swirl, both on a solid
@@ -261,7 +257,7 @@ function emailShell(bodyHtml) {
 function waitlistTemplate() {
   const html = emailShell(`
     <h1 style="margin:0 0 16px; font-size:20px; color:#1a1a1a;">You're on the wait list</h1>
-    <p style="margin:0 0 16px;">Thanks for joining the Nomad.PoE wait list. You're in line — we'll email this address the moment it's available to order.</p>
+    <p style="margin:0 0 16px;">Thanks for joining the nomad.poe wait list. You're in line — we'll email this address the moment it's available to order.</p>
     <p style="margin:0 0 16px;">nomad.poe is a battery-powered PoE field tool — power and a gigabit network for your camera in one compact box, no AC required. Built for techs who do the work.</p>
     <p style="margin:0;">Questions? Just reply to this email.</p>
   `);
@@ -269,7 +265,7 @@ function waitlistTemplate() {
   const text = [
     "You're on the Nomad Tools wait list",
     '',
-    "Thanks for joining the Nomad.PoE wait list. You're in line — we'll email this address the moment it's available to order.",
+    "Thanks for joining the nomad.poe wait list. You're in line — we'll email this address the moment it's available to order.",
     '',
     'nomad.poe is a battery-powered PoE field tool — power and a gigabit network for your camera in one compact box, no AC required. Built for techs who do the work.',
     '',
